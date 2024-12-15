@@ -19,6 +19,9 @@ The dataset contains information about different physicochemical tests of red wi
 - Initialized data.py with home route & load-data route. Tested Flask app with successful load of csv. Initialized .venv & README.md
 
 ## Second Commit
+
+- Initialized requirements.txt, added /bar-chart route, initialized bar_chart.html.(Can I initalize a model that uses X,Y,Z axis for the third commit?)
+
 ## Third Commit
 ## Fourth Commit
 ## Fifth Commit

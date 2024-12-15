@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Quality Bar Chart</title>
+</head>
+<body>
+    <h1>Wine Quality Distribution</h1>
+
+    <!-- Form for selecting x and y features -->
+    <form action="/bar-chart" method="POST">
+        <label for="x_feature">Select X Feature:</label>
+        <select id="x_feature" name="x_feature">
+            {% for feature in valid_features %}
+                <option value="{{ feature }}" {% if feature == selected_x %} selected {% endif %}>{{ feature.capitalize() }}</option>
+            {% endfor %}
+        </select>
+        
+        <label for="y_feature">Select Y Feature:</label>
+        <select id="y_feature" name="y_feature">
+            <option value="count" {% if 'count' == selected_y %} selected {% endif %}>Count</option>
+            {% for feature in valid_features %}
+                <option value="{{ feature }}" {% if feature == selected_y %} selected {% endif %}>{{ feature.capitalize() }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Generate Chart</button>
+    </form>
+
+    {% if plot_url %}
+        <h3>Generated Bar Chart</h3>
+        <img src="data:image/png;base64,{{ plot_url }}" alt="Bar chart">
+    {% endif %}
+
+    {% if feature_stats %}
+        <h3>Descriptive Statistics for "{{ selected_x.capitalize() }}"</h3>
+        <table border="1">
+            <tr><th>Statistic</th><th>Value</th></tr>
+            <tr><td>Count</td><td>{{ feature_stats['count'] }}</td></tr>
+            <tr><td>Mean</td><td>{{ feature_stats['mean'] }}</td></tr>
+            <tr><td>Std</td><td>{{ feature_stats['std'] }}</td></tr>
+            <tr><td>Min</td><td>{{ feature_stats['min'] }}</td></tr>
+            <tr><td>25th Percentile</td><td>{{ feature_stats['25%'] }}</td></tr>
+            <tr><td>50th Percentile (Median)</td><td>{{ feature_stats['50%'] }}</td></tr>
+            <tr><td>75th Percentile</td><td>{{ feature_stats['75%'] }}</td></tr>
+            <tr><td>Max</td><td>{{ feature_stats['max'] }}</td></tr>
+        </table>
+    {% endif %}
+</body>
+</html>
