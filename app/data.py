@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, request, jsonify
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.express as px
 from io import BytesIO
 import base64
 
@@ -67,6 +68,59 @@ def bar_chart():
     
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+    
+@app.route('/3d-visualization', methods=['GET', 'POST'])
+def three_d_visualization():
+    try:
+        # Load the dataset
+        data = pd.read_csv(DATA_PATH)
+
+        if request.method == 'POST':
+            # Get the selected features from the form
+            x_feature = request.form.get('x_feature')
+            y_feature = request.form.get('y_feature')
+            z_feature = request.form.get('z_feature')
+
+            # Validate selected features
+            for feature in [x_feature, y_feature, z_feature]:
+                if feature not in valid_features:
+                    return jsonify({
+                        "status": "error",
+                        "message": f"Invalid feature selected: {feature}. Choose from {', '.join(valid_features)}"
+                    }), 400
+
+            # Generate the 3D plot using Plotly
+            fig = px.scatter_3d(
+                data, 
+                x=x_feature, 
+                y=y_feature, 
+                z=z_feature,
+                color="quality",  # Use wine quality as the color indicator
+                title=f"3D Visualization: {x_feature} vs {y_feature} vs {z_feature}"
+            )
+
+            # Convert the Plotly figure to an HTML div
+            graph_html = fig.to_html(full_html=False)
+
+            return render_template(
+                '3d_visualization.html',
+                graph_html=graph_html,
+                valid_features=valid_features,
+                selected_x=x_feature,
+                selected_y=y_feature,
+                selected_z=z_feature
+            )
+
+        # Serve the form for selecting features if GET request
+        return render_template(
+            '3d_visualization.html', 
+            graph_html=None, 
+            valid_features=valid_features
+        )
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

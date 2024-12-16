@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Visualization</title>
+</head>
+<body>
+    <h1>3D Visualization of Wine Dataset</h1>
+
+    <!-- Form for selecting x, y, z features -->
+    <form action="/3d-visualization" method="POST">
+        <label for="x_feature">Select X Feature:</label>
+        <select id="x_feature" name="x_feature">
+            {% for feature in valid_features %}
+                <option value="{{ feature }}" {% if feature == selected_x %} selected {% endif %}>{{ feature.capitalize() }}</option>
+            {% endfor %}
+        </select>
+        
+        <label for="y_feature">Select Y Feature:</label>
+        <select id="y_feature" name="y_feature">
+            {% for feature in valid_features %}
+                <option value="{{ feature }}" {% if feature == selected_y %} selected {% endif %}>{{ feature.capitalize() }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="z_feature">Select Z Feature:</label>
+        <select id="z_feature" name="z_feature">
+            {% for feature in valid_features %}
+                <option value="{{ feature }}" {% if feature == selected_z %} selected {% endif %}>{{ feature.capitalize() }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Generate 3D Chart</button>
+    </form>
+
+    {% if graph_html %}
+        <h3>Generated 3D Chart</h3>
+        <!-- Display the interactive Plotly chart -->
+        {{ graph_html | safe }}
+    {% endif %}
+</body>
+</html>

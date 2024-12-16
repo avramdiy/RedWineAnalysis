@@ -23,5 +23,8 @@ The dataset contains information about different physicochemical tests of red wi
 - Initialized requirements.txt, added /bar-chart route, initialized bar_chart.html.(Can I initalize a model that uses X,Y,Z axis for the third commit?)
 
 ## Third Commit
+
+- Initalized 3d visualization route in data.py, initialized 3d_visualization.html, updated requirements.txt
+
 ## Fourth Commit
 ## Fifth Commit
