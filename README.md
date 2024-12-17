@@ -27,4 +27,9 @@ The dataset contains information about different physicochemical tests of red wi
 - Initalized 3d visualization route in data.py, initialized 3d_visualization.html, updated requirements.txt
 
 ## Fourth Commit
+
+- Performed 3D analysis, hypothesis, with associated markdown documentation.
+
 ## Fifth Commit
+
+- Trained a machine learning model using the features of density, residual sugar, and alcohol to predict wine quality. A separate route and HTML page were created, allowing users to input these feature values and receive a predicted wine quality based on the trained model.

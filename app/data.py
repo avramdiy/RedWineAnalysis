@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 from io import BytesIO
 import base64
+import joblib
 
 # Set the correct path to the templates folder in the root directory
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'))
@@ -19,9 +20,12 @@ valid_features = [
     "sulphates", "total sulfur dioxide", "volatile acidity"
 ]
 
+# Load the trained model
+model = joblib.load('wine_quality_model.pkl')
+
 @app.route('/')
 def home():
-    return "Welcome to the Flask API. Use /bar-chart to load the bar chart interface."
+    return "Welcome to the Flask API. Use /bar-chart to load the bar chart interface. Use /3d-visualization to load the 3D model. Use /predict to load a user-oriented selection of values to calcuate wine quality based on the trained model from the dataset used for this week."
 
 @app.route('/bar-chart', methods=['GET', 'POST'])
 def bar_chart():
@@ -121,6 +125,24 @@ def three_d_visualization():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+@app.route('/predict', methods=['GET', 'POST'])
+def predict():
+    if request.method == 'POST':
+        try:
+            # Get values from the form
+            density = float(request.form['density'])
+            residual_sugar = float(request.form['residual_sugar'])
+            alcohol = float(request.form['alcohol'])
+
+            # Predict wine quality using the model
+            prediction = model.predict([[density, residual_sugar, alcohol]])[0]
+
+            return render_template('predict.html', prediction=prediction)
+
+        except Exception as e:
+            return jsonify({"status": "error", "message": str(e)}), 500
+
+    return render_template('predict.html', prediction=None)
 
 if __name__ == '__main__':
     app.run(debug=True)
